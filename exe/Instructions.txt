@@ -1,0 +1,23 @@
+DUDE! 
+
+I Finally got round to doing it! Here's your jukebox!
+
+It's a bit basic, but it works! I'll probably improve it bit by bit every so often!
+
+It has a screen size of 600x800, and uses the images in the folder for the background and for albums it doesnt find a cover for.
+
+The thing to run is the IronJuke.jar. This means it also needs Java, Hopefully you've already got it!!
+
+The file locationStr.txt is the file which tells the jukebox where the songs are. The tracks need to be in a folder which has the name of the Album, and the albums ned to be in a folder with the name of the Artist. So, for Heart of a Dragon from Valley of the Damned by Dragonforce the folders should be /Dragonforce/Valley of the Damned/Heart of a Dragon.mp3
+
+If the folder in locationStr.txt is C:/Music. The whole folder structure should be C:/Music/Dragonforce/Valley of the Damned/Heart of a Dragon.mp3
+
+It only does MP3s so far, if it finds a folder without any MP3s in it it'll ignore it. Might be able to add more file types some time if you need them.
+
+The pictures for the albums are taken from the folders. If the program finds a jpg, png or bmp image called cover (cover.jpg, cover.png, cover.bmp) it'll use that, failing that it'll use any image it finds, failing the failing that it'll use the noimg.png file (which should be 2 crossed axes currently!)
+
+It you want it to look different you can change the two images in the main folder.
+
+I think that's it!  If you've got any questions, Drop me a line!!  :)
+
+Louis.
