@@ -1,5 +1,6 @@
 package com.louisfellows.ironjuke.view;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -12,20 +13,20 @@ import com.louisfellows.ironjuke.controller.KeyListen;
 
 public class UI {
 
-    private final JFrame frame;
+    private JFrame frame;
     private final ArrayList<AlbumView> panels;
     private Controller controller;
-    private final PlayBar playBar;
+    private PlayBar playBar;
 
-    public UI(final Controller newcontroller) {
+    public UI(final Controller newcontroller) throws InterruptedException, InvocationTargetException {
         panels = new ArrayList<AlbumView>();
-        frame = new JFrame();
-        playBar = new PlayBar();
         setController(newcontroller);
 
-        SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeAndWait(new Runnable() {
             @Override
             public void run() {
+                playBar = new PlayBar();
+                frame = new JFrame();
 
                 frame.setLayout(null);
 
@@ -91,6 +92,22 @@ public class UI {
     public void hideAlbum(int album) {
         AlbumView a = panels.get(album);
         a.setVisible(false);
+    }
+
+    public void clearPlayingTrack() {
+        playBar.clearPlayingTrack();
+    }
+
+    public void setPlaybarSelectionString(String selection) {
+        playBar.setSelection(selection);
+    }
+
+    public void updatePlaybarTrack(String trackTitle, String albumTitle, String artist, String coverPath) {
+        playBar.setTrack(trackTitle);
+        playBar.setAlbum(albumTitle);
+        playBar.setArtist(artist);
+
+        playBar.setCover(coverPath);
     }
 
     public void repaint() {

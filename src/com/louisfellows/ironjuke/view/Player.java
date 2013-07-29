@@ -37,7 +37,7 @@ public class Player extends PlaybackListener {
 			new Thread() {
 				public void run() {
 					try {
-						m_Controller.UpdatePlayingTrack(track);
+						m_Controller.updatePlayingTrack(track);
 						FileInputStream fIS = new FileInputStream(track.m_Location);
 						m_Player = new AdvancedPlayer(fIS);
 						m_Player.setPlayBackListener(m_Controller.getPlayer());
@@ -72,7 +72,7 @@ public class Player extends PlaybackListener {
 	@Override
 	public void playbackFinished(PlaybackEvent evt) {
 		m_Playing = false;
-		m_Controller.ClearPlayingTrack();
+		m_Controller.clearPlayingTrack();
 		playNext();
 	}
 

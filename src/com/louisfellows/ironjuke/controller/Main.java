@@ -1,5 +1,7 @@
 package com.louisfellows.ironjuke.controller;
 
+import java.lang.reflect.InvocationTargetException;
+
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -23,7 +25,15 @@ public class Main {
             }
         });
 
-        m_Controller = new Controller();
+        try {
+            m_Controller = new Controller();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.exit(1);
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
 
     }
 
