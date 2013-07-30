@@ -13,7 +13,7 @@ import com.louisfellows.ironjuke.view.UI;
  * 
  * Controls the system.
  * 
- * @author Louis
+ * @author Louis Fellows <louis@louisfellows.com>
  * 
  */
 

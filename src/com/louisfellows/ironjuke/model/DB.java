@@ -12,11 +12,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import com.louisfellows.ironjuke.exceptions.AlbumNotFoundException;
+
+/**
+ * Creates and manages a Database of tracks.
+ * 
+ * Contains functions to discover all tracks in a given directory. Assumes a
+ * folder structure of /music_root/Artist/Album/[tracks]
+ * 
+ * @author Louis Fellows <louis@louisfellows.com>
+ * 
+ */
 public class DB {
 
+    private static final int TRACKS_PER_ALBUM = 13;
+    private static final String DEFAULT_MUSIC_ROOT = "G:/My Music";
     private final HashMap<Integer, Album> albums;
-    private File root = new File("G:/My Music");
+    private File root = new File(DEFAULT_MUSIC_ROOT);
 
+    /**
+     * Constructor. Attempts to read the music root location from a config file.
+     * If this cannot be found uses the default set in DEFAULT_MUSIC_ROOT
+     * constant.
+     */
     public DB() {
         albums = new HashMap<Integer, Album>();
 
@@ -26,25 +44,54 @@ public class DB {
         } catch (IOException e) {
         }
 
-        System.out.println(root.getAbsolutePath());
-        recurseDirectory(root);
+        scanDirectory(root);
     }
 
-    public Album getAlbum(Integer albumNumber) throws Exception {
+    /**
+     * returns the album with the given display number.
+     * 
+     * @param albumNumber
+     *            the display number of the requested album
+     * @return the album for the given number
+     * @throws AlbumNotFoundException
+     *             if the album cannot be found
+     */
+    public Album getAlbum(Integer albumNumber) throws AlbumNotFoundException {
         if (albums.containsKey(albumNumber)) {
             return albums.get(albumNumber);
         } else {
-            throw new Exception();
+            throw new AlbumNotFoundException();
         }
     }
 
-    private void recurseDirectory(File directory) {
+    /**
+     * scans a directory for compatible music files (currently limited to mp3s)
+     * to be added to the database. This method is recursive and will check each
+     * directory under the first directory it is given. It will continue until
+     * all folders have been searched or 999 albums have been identified.
+     * 
+     * Will attempt to identify a cover image for each album. Will use images
+     * with the following priority
+     * <ol>
+     * <li>image file named 'cover.jpg'</li>
+     * <li>image file named 'cover.png'</li>
+     * <li>the first image file in the directory</li>
+     * <li>the default 'no image' image</li>
+     * </ol>
+     * 
+     * Assumes a folder structure of /music_root/Artist/Album/[tracks]
+     * 
+     * @param directory
+     */
+    private void scanDirectory(File directory) {
 
         if (!directory.isDirectory()) {
+            // finish recursing if the given file is not a directory
             return;
         }
 
         if (albums.size() >= 999) {
+            // finish recursing if we are already full of albums
             return;
         }
 
@@ -56,9 +103,10 @@ public class DB {
             }
         };
 
-        File[] MP3s = directory.listFiles(filefilter);
+        File[] mp3s = directory.listFiles(filefilter);
 
-        if (MP3s.length > 0) {
+        if (mp3s.length > 0) {
+            // Check for an Artist/Album/tracks directory structure.
             String[] details = directory.getAbsolutePath().split("\\" + File.separator);
             if (details.length > 3) {
                 String artist = details[details.length - 2];
@@ -89,26 +137,35 @@ public class DB {
 
                 if ((new File(directory.getAbsolutePath() + "cover.jpg")).exists()) {
                     cover = directory.getAbsolutePath() + "cover.jpg";
-                    System.out.println(cover);
                 } else if ((new File(directory.getAbsolutePath() + "cover.png")).exists()) {
                     cover = directory.getAbsolutePath() + "cover.png";
-                    System.out.println(cover);
                 } else if (imgs.length > 0) {
                     cover = imgs[0].getAbsolutePath();
-                    System.out.println(cover);
                 } else {
                     cover = "img/noimg.png";
                 }
 
-                Album album = new Album(title, artist, cover);
+                // Split album into groups of TRACKS_PER_ALBUM tracks. this
+                // stops there being too many tracks to display on one card.
+                for (int i = 0; i < mp3s.length; i += TRACKS_PER_ALBUM) {
 
-                for (File mp3 : MP3s) {
-                    String ttitle = mp3.getName();
-                    Track track = new Track(ttitle, mp3.getAbsolutePath(), album);
-                    album.getTrack().put(album.getTrack().size(), track);
+                    Album album;
+                    if (mp3s.length > TRACKS_PER_ALBUM) {
+                        String part = Integer.toString((i / TRACKS_PER_ALBUM) + 1);
+                        album = new Album(title + " (Part " + part + ")", artist, cover);
+                    } else {
+                        album = new Album(title, artist, cover);
+                    }
+
+                    for (int j = i; (j < i + TRACKS_PER_ALBUM) && (j < mp3s.length); j++) {
+                        File mp3 = mp3s[j];
+                        String ttitle = mp3.getName();
+                        Track track = new Track(ttitle, mp3.getAbsolutePath(), album);
+                        album.getTrack().put(album.getTrack().size(), track);
+                    }
+
+                    albums.put(albums.size(), album);
                 }
-
-                albums.put(albums.size(), album);
             }
         }
 
@@ -125,14 +182,24 @@ public class DB {
         Collections.sort(dirs);
 
         for (File dir : dirs) {
-            recurseDirectory(dir);
+            scanDirectory(dir);
         }
     }
 
+    /**
+     * Returns the total number of albums in the system.
+     * 
+     * @return the total number of albums
+     */
     public int getNumberAlbums() {
         return albums.size();
     }
 
+    /**
+     * returns a random albums
+     * 
+     * @return a randomly picked albums
+     */
     public Album getRandomAlbum() {
         Random random = new Random();
         Album album = null;
@@ -143,6 +210,15 @@ public class DB {
         return album;
     }
 
+    /**
+     * Returns the contents of the file at the given filepath as a String.
+     * 
+     * @param filePath
+     *            the file to read
+     * @return the contents of the file as a string
+     * @throws java.io.IOException
+     *             if the file cannot be read.
+     */
     private static String readFileAsString(String filePath) throws java.io.IOException {
         StringBuffer fileData = new StringBuffer(1000);
         BufferedReader reader = new BufferedReader(new FileReader(filePath));

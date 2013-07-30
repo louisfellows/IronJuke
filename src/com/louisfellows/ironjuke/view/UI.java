@@ -11,6 +11,12 @@ import javax.swing.SwingUtilities;
 import com.louisfellows.ironjuke.controller.Controller;
 import com.louisfellows.ironjuke.controller.KeyListen;
 
+/**
+ * Creates and handles the UI
+ * 
+ * @author Louis Fellows <louis@louisfellows.com>
+ * 
+ */
 public class UI {
 
     private JFrame frame;

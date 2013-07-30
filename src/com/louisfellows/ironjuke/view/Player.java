@@ -4,76 +4,100 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayDeque;
 
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.advanced.AdvancedPlayer;
+import javazoom.jl.player.advanced.PlaybackEvent;
+import javazoom.jl.player.advanced.PlaybackListener;
+
 import com.louisfellows.ironjuke.controller.Controller;
 import com.louisfellows.ironjuke.model.Track;
 
-
-
-import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.player.advanced.*;
-
+/**
+ * Handles song playback and the play queue.
+ * 
+ * @author Louis Fellows <louis@louisfellows.com>
+ * 
+ */
 public class Player extends PlaybackListener {
-	
-	private ArrayDeque<Track> m_Tracks;
-	private AdvancedPlayer m_Player;
-	private Boolean m_Playing;
-	private Controller m_Controller;
-	
-	public Player() {
-		
-		m_Tracks = new ArrayDeque<Track>();
-		m_Playing = false;
-	}
-	
-	public void setController( Controller p_Controller ) {
-		m_Controller = p_Controller;
-	}
-	
-	public void playNext() {
-		
-		if (m_Tracks.size() > 0) {
-			final Track track = m_Tracks.pollFirst();
-			
-			new Thread() {
-				public void run() {
-					try {
-						m_Controller.updatePlayingTrack(track);
-						FileInputStream fIS = new FileInputStream(track.m_Location);
-						m_Player = new AdvancedPlayer(fIS);
-						m_Player.setPlayBackListener(m_Controller.getPlayer());
-						m_Playing = true;
-						m_Player.play();
-					} catch (JavaLayerException e) {
-						e.printStackTrace();
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					}	
-				}
-			}.start();
-		}
-	}
-	
-	public void addTrack(Track p_Track) {
-		m_Tracks.addLast(p_Track);
-		
-		if (m_Playing == false) {
-			playNext();
-		}
-	}
-	
-	public void stopCurrent() {
-		m_Player.stop();
-	}
-	
-	@Override
-	public void playbackStarted(PlaybackEvent evt) {
-	}
-	
-	@Override
-	public void playbackFinished(PlaybackEvent evt) {
-		m_Playing = false;
-		m_Controller.clearPlayingTrack();
-		playNext();
-	}
+
+    private final ArrayDeque<Track> tracks;
+    private AdvancedPlayer player;
+    private Boolean playing;
+    private Controller controller;
+
+    public Player() {
+
+        tracks = new ArrayDeque<Track>();
+        playing = false;
+    }
+
+    /**
+     * Set the controller object for this player.
+     * 
+     * @param controller
+     *            the new controller object
+     */
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
+
+    /**
+     * Starts playing the next song in the queue.
+     */
+    public void playNext() {
+
+        if (tracks.size() > 0) {
+            final Track track = tracks.pollFirst();
+
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        controller.updatePlayingTrack(track);
+                        FileInputStream fIS = new FileInputStream(track.m_Location);
+                        player = new AdvancedPlayer(fIS);
+                        player.setPlayBackListener(controller.getPlayer());
+                        playing = true;
+                        player.play();
+                    } catch (JavaLayerException e) {
+                        e.printStackTrace();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
+        }
+    }
+
+    /**
+     * Add a track to the queue.
+     * 
+     * @param track
+     *            the track to add to the queue.
+     */
+    public void addTrack(Track track) {
+        tracks.addLast(track);
+
+        if (playing == false) {
+            playNext();
+        }
+    }
+
+    /**
+     * Stop playing the current track
+     */
+    public void stopCurrent() {
+        player.stop();
+    }
+
+    /**
+     * Actions to perform when a song finishes.
+     */
+    @Override
+    public void playbackFinished(PlaybackEvent evt) {
+        playing = false;
+        controller.clearPlayingTrack();
+        playNext();
+    }
 
 }

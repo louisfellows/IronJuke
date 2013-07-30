@@ -2,7 +2,6 @@ package com.louisfellows.ironjuke.view;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -13,6 +12,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.louisfellows.ironjuke.view.util.ImageHandler;
+
+/**
+ * Panel which contains the currently playing song and the number the user is
+ * typing to select a song.
+ * 
+ * @author Louis Fellows <louis@louisfellows.com>
+ * 
+ */
 public class PlayBar extends JPanel {
 
     private static final long serialVersionUID = 5040392197822450873L;
@@ -23,6 +31,9 @@ public class PlayBar extends JPanel {
     private final JLabel selection;
     private final JLabel image;
 
+    /**
+     * Setup the bar.
+     */
     public PlayBar() {
 
         setLayout(null);
@@ -63,22 +74,46 @@ public class PlayBar extends JPanel {
         selection.setBounds(600, 0, 200, 100);
     }
 
-    public void setTrack(String p_Track) {
-        track.setText(p_Track);
+    /**
+     * Sets the track string for the currently playing song display
+     * 
+     * @param trackText
+     *            the new track name
+     */
+    public void setTrack(String trackText) {
+        track.setText(trackText);
     }
 
-    public void setArtist(String p_Artist) {
-        artist.setText(p_Artist);
+    /**
+     * Sets the artist string for the currently playing song display
+     * 
+     * @param artistText
+     *            the new artist name
+     */
+    public void setArtist(String artistText) {
+        artist.setText(artistText);
     }
 
-    public void setAlbum(String p_Album) {
-        album.setText(p_Album);
+    /**
+     * Sets the album string for the currently playing song display
+     * 
+     * @param albumText
+     *            the new album name
+     */
+    public void setAlbum(String albumText) {
+        album.setText(albumText);
     }
 
-    public void setCover(String p_Cover) {
+    /**
+     * Sets the cover image path for the currently playing song display
+     * 
+     * @param coverPath
+     *            the new cover image path
+     */
+    public void setCover(String coverPath) {
         try {
-            BufferedImage bi = ImageIO.read(new File(p_Cover));
-            bi = resizeImage(bi, bi.getType());
+            BufferedImage bi = ImageIO.read(new File(coverPath));
+            bi = ImageHandler.resizeImage(bi, bi.getType(), 100, 100);
             ImageIcon cover = new ImageIcon(bi);
             image.setIcon(cover);
         } catch (IOException e) {
@@ -86,19 +121,19 @@ public class PlayBar extends JPanel {
         }
     }
 
-    public void setSelection(String p_Sel) {
-        selection.setText(p_Sel);
+    /**
+     * Sets the song selection string.
+     * 
+     * @param selectionString
+     *            the new song selection string
+     */
+    public void setSelection(String selectionString) {
+        selection.setText(selectionString);
     }
 
-    private static BufferedImage resizeImage(BufferedImage originalImage, int type) {
-        BufferedImage resizedImage = new BufferedImage(100, 100, type);
-        Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(originalImage, 0, 0, 100, 100, null);
-        g.dispose();
-
-        return resizedImage;
-    }
-
+    /**
+     * Clear the text in the currently playing track bar
+     */
     public void clearPlayingTrack() {
         setTrack("");
         setAlbum("");
