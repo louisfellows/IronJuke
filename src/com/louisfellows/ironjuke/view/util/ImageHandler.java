@@ -18,13 +18,13 @@ public class ImageHandler {
      *            the original image
      * @param type
      *            the buffered image type.
-     * @param newHeight
-     *            the height of the new image
      * @param newWidth
      *            the width of the new image
+     * @param newHeight
+     *            the height of the new image
      * @return the resized image
      */
-    public static BufferedImage resizeImage(BufferedImage originalImage, int type, int newHeight, int newWidth) {
+    public static BufferedImage resizeImage(BufferedImage originalImage, int type, int newWidth, int newHeight) {
         BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, type);
         Graphics2D g = resizedImage.createGraphics();
         g.drawImage(originalImage, 0, 0, newWidth, newHeight, null);

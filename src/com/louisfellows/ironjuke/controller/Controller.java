@@ -1,5 +1,7 @@
 package com.louisfellows.ironjuke.controller;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.lang.reflect.InvocationTargetException;
 
 import com.louisfellows.ironjuke.model.Album;
@@ -18,18 +20,23 @@ import com.louisfellows.ironjuke.view.UI;
  */
 
 public class Controller {
-    private static final int NUMBER_OF_ALBUMS = 4;
+    private int numberOfAlbums = 4;
     private int albumStart;
     private final DB db;
     private final Player player;
     private final UI ui;
 
     public Controller() throws InterruptedException, InvocationTargetException {
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int) screenSize.getWidth();
+        int height = (int) screenSize.getHeight();
+
         db = new DB();
         player = new Player();
         player.setController(this);
 
-        ui = new UI(this);
+        ui = new UI(this, width, height);
         albumStart = 0;
 
         UpdateAlbums(albumStart);
@@ -69,9 +76,9 @@ public class Controller {
      * Moves the current page of albums left.
      */
     public void pageLeft() {
-        albumStart -= NUMBER_OF_ALBUMS;
+        albumStart -= numberOfAlbums;
         if (albumStart < 0) {
-            albumStart = db.getNumberAlbums() - NUMBER_OF_ALBUMS;
+            albumStart = db.getNumberAlbums() - numberOfAlbums;
         }
         UpdateAlbums(albumStart);
     }
@@ -80,8 +87,8 @@ public class Controller {
      * Moves the current page of albums right.
      */
     public void pageRight() {
-        albumStart += NUMBER_OF_ALBUMS;
-        if (albumStart > db.getNumberAlbums() - NUMBER_OF_ALBUMS) {
+        albumStart += numberOfAlbums;
+        if (albumStart > db.getNumberAlbums() - numberOfAlbums) {
             albumStart = 0;
         }
         UpdateAlbums(albumStart);
@@ -123,7 +130,7 @@ public class Controller {
      */
     public void UpdateAlbums(int startAlbum) {
 
-        for (int i = 0; i < NUMBER_OF_ALBUMS; i++) {
+        for (int i = 0; i < numberOfAlbums; i++) {
             try {
                 Album a = db.getAlbum(startAlbum + i);
                 ui.updateAlbum(i, a.getCover(), a.getArtist(), a.getTitle(), a.getTrackList(), (startAlbum + (i + 1)) + "");
@@ -141,5 +148,9 @@ public class Controller {
      */
     public void updatePlayingTrack(Track track) {
         ui.updatePlaybarTrack(track.getTitle(), track.getAlbum().getTitle(), track.getAlbum().getArtist(), track.getAlbum().getCover());
+    }
+
+    public void setNumberOfAlbums(int numberOfAlbums) {
+        this.numberOfAlbums = numberOfAlbums;
     }
 }

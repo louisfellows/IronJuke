@@ -23,6 +23,9 @@ public class AlbumView extends JPanel {
 
     private static final long serialVersionUID = -2024743821441955507L;
 
+    public static final int ALBUMVIEW_WIDTH = 390;
+    public static final int ALBUMVIEW_HEIGHT = 250;
+
     JLabel trackList;
     ImageIcon cover;
     JLabel title;
@@ -43,21 +46,24 @@ public class AlbumView extends JPanel {
         trackList.setBounds(250, 40, 140, 210);
         trackList.setVerticalAlignment(JLabel.TOP);
         trackList.setOpaque(false);
+        trackList.setForeground(Color.BLACK);
 
         artist = new JLabel("ARTIST");
         artist.setBounds(250, 0, 140, 20);
-        artist.setFont(new Font("Serif", Font.BOLD, 12));
+        artist.setFont(new Font("SansSerif", Font.BOLD, 12));
+        artist.setForeground(Color.BLACK);
 
         title = new JLabel("ALBUM");
         title.setBounds(250, 20, 140, 20);
-        title.setFont(new Font("Serif", Font.BOLD, 12));
+        title.setFont(new Font("SansSerif", Font.BOLD, 12));
+        title.setForeground(Color.BLACK);
 
         albumNo = new JLabel("0");
         albumNo.setBounds(0, 0, 60, 40);
         albumNo.setOpaque(true);
         albumNo.setBackground(Color.BLACK);
         albumNo.setForeground(Color.WHITE);
-        albumNo.setFont(new Font("Serif", Font.BOLD, 25));
+        albumNo.setFont(new Font("SansSerif", Font.BOLD, 25));
         albumNo.setHorizontalAlignment(JLabel.CENTER);
 
         add(albumNo);

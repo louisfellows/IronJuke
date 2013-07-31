@@ -25,6 +25,9 @@ public class PlayBar extends JPanel {
 
     private static final long serialVersionUID = 5040392197822450873L;
 
+    public static final int PLAYBAR_WIDTH = 800;
+    public static final int PLAYBAR_HEIGHT = 100;
+
     private final JLabel track;
     private final JLabel artist;
     private final JLabel album;
@@ -40,15 +43,19 @@ public class PlayBar extends JPanel {
         setOpaque(false);
 
         track = new JLabel("");
-        track.setFont(new Font("Serif", Font.BOLD, 25));
+        track.setFont(new Font("SansSerif", Font.BOLD, 25));
+        track.setForeground(Color.BLACK);
 
         artist = new JLabel("");
-        artist.setFont(new Font("Serif", Font.BOLD, 25));
+        artist.setFont(new Font("SansSerif", Font.BOLD, 25));
+        artist.setForeground(Color.BLACK);
 
         album = new JLabel("");
-        album.setFont(new Font("Serif", Font.BOLD, 25));
+        album.setFont(new Font("SansSerif", Font.BOLD, 25));
+        album.setForeground(Color.BLACK);
 
         selection = new JLabel("   :  ");
+        selection.setForeground(Color.BLACK);
         image = new JLabel();
 
         add(image);

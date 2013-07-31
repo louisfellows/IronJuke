@@ -1,8 +1,12 @@
 package com.louisfellows.ironjuke.view;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -11,6 +15,7 @@ import javax.swing.SwingUtilities;
 import com.louisfellows.ironjuke.controller.Controller;
 import com.louisfellows.ironjuke.controller.KeyListen;
 import com.louisfellows.ironjuke.controller.WindowCloseListener;
+import com.louisfellows.ironjuke.view.util.ImageHandler;
 
 /**
  * Creates and handles the UI
@@ -20,12 +25,14 @@ import com.louisfellows.ironjuke.controller.WindowCloseListener;
  */
 public class UI {
 
+    private static final int MARGIN_LEFTRIGHT = 10;
+    private static final int MARGIN_TOPBOTTOM = 10;
     private JFrame frame;
     private final ArrayList<AlbumView> panels;
     private Controller controller;
     private PlayBar playBar;
 
-    public UI(final Controller newcontroller) throws InterruptedException, InvocationTargetException {
+    public UI(final Controller newcontroller, final int width, final int height) throws InterruptedException, InvocationTargetException {
         panels = new ArrayList<AlbumView>();
         setController(newcontroller);
 
@@ -38,38 +45,51 @@ public class UI {
                 frame.setLayout(null);
 
                 frame.setUndecorated(true);
-                frame.setBounds(0, 0, 800, 600);
+                frame.setBounds(0, 0, width, height);
 
                 frame.addWindowListener(new WindowCloseListener());
 
                 JLabel bg = new JLabel();
-                ImageIcon ii = new ImageIcon("./img/bg.png");
-                bg.setIcon(ii);
-                bg.setBounds(0, 0, 800, 600);
+
+                BufferedImage bi;
+                try {
+                    bi = ImageIO.read(new File("./img/bg.png"));
+                    bi = ImageHandler.resizeImage(bi, bi.getType(), width, height);
+                    ImageIcon ii = new ImageIcon(bi);
+
+                    bg.setIcon(ii);
+                    bg.setBounds(0, 0, width, height);
+                } catch (IOException e) {
+                    // Do nothing, have no background!
+                }
+
+                int usableWidth = width - 2 * (MARGIN_LEFTRIGHT);
+                int columns = usableWidth / AlbumView.ALBUMVIEW_WIDTH;
+                int remainingSpaceHoriz = usableWidth % AlbumView.ALBUMVIEW_WIDTH;
+
+                int usableHeight = height - 2 * (MARGIN_TOPBOTTOM) - PlayBar.PLAYBAR_HEIGHT;
+                int rows = usableHeight / AlbumView.ALBUMVIEW_HEIGHT;
+                int remainingSpaceVert = usableHeight % AlbumView.ALBUMVIEW_HEIGHT;
 
                 AlbumView jp;
 
-                jp = new AlbumView();
-                jp.setBounds(10, 0, 390, 250);
-                frame.add(jp);
-                panels.add(jp);
+                for (int i = 0; i < columns; i++) {
+                    int leftPos = (i * AlbumView.ALBUMVIEW_WIDTH) + MARGIN_LEFTRIGHT + (remainingSpaceHoriz / 2);
 
-                jp = new AlbumView();
-                jp.setBounds(10, 250, 390, 250);
-                frame.add(jp);
-                panels.add(jp);
+                    for (int j = 0; j < rows; j++) {
+                        int topPos = (j * AlbumView.ALBUMVIEW_HEIGHT) + MARGIN_TOPBOTTOM + (remainingSpaceVert / 2);
 
-                jp = new AlbumView();
-                jp.setBounds(400, 0, 390, 250);
-                frame.add(jp);
-                panels.add(jp);
+                        jp = new AlbumView();
+                        jp.setBounds(leftPos, topPos, AlbumView.ALBUMVIEW_WIDTH, AlbumView.ALBUMVIEW_HEIGHT);
+                        frame.add(jp);
+                        panels.add(jp);
 
-                jp = new AlbumView();
-                jp.setBounds(400, 250, 390, 250);
-                frame.add(jp);
-                panels.add(jp);
+                    }
+                }
 
-                playBar.setBounds(0, 500, 800, 100);
+                controller.setNumberOfAlbums(rows * columns);
+
+                playBar.setBounds((width - PlayBar.PLAYBAR_WIDTH) / 2, height - PlayBar.PLAYBAR_HEIGHT, PlayBar.PLAYBAR_WIDTH, PlayBar.PLAYBAR_HEIGHT);
                 frame.add(playBar);
                 frame.setVisible(true);
 
