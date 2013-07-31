@@ -8,6 +8,12 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel;
 
+/**
+ * Main method for the IronJuke
+ * 
+ * @author Louis
+ * 
+ */
 public class Main {
 
     public static Controller m_Controller;

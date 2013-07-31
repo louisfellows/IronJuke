@@ -126,13 +126,11 @@ public class Controller {
         for (int i = 0; i < NUMBER_OF_ALBUMS; i++) {
             try {
                 Album a = db.getAlbum(startAlbum + i);
-                ui.setUpAlbum(i, a.getCover(), a.getArtist(), a.getTitle(), a.getTrackList(), (startAlbum + (i + 1)) + "");
+                ui.updateAlbum(i, a.getCover(), a.getArtist(), a.getTitle(), a.getTrackList(), (startAlbum + (i + 1)) + "");
             } catch (Exception e) {
                 ui.hideAlbum(i);
             }
         }
-
-        ui.repaint();
     }
 
     /**

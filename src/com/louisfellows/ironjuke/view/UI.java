@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 
 import com.louisfellows.ironjuke.controller.Controller;
 import com.louisfellows.ironjuke.controller.KeyListen;
+import com.louisfellows.ironjuke.controller.WindowCloseListener;
 
 /**
  * Creates and handles the UI
@@ -38,6 +39,8 @@ public class UI {
 
                 frame.setUndecorated(true);
                 frame.setBounds(0, 0, 800, 600);
+
+                frame.addWindowListener(new WindowCloseListener());
 
                 JLabel bg = new JLabel();
                 ImageIcon ii = new ImageIcon("./img/bg.png");
@@ -77,46 +80,87 @@ public class UI {
         });
     }
 
+    /**
+     * Sets the controller object for this object
+     * 
+     * @param controller
+     *            the new controller
+     */
     public void setController(Controller controller) {
         this.controller = controller;
     }
 
-    public PlayBar getPlayBar() {
-        return playBar;
-    }
-
-    public void setUpAlbum(int album, String cover, String artist, String title, String track, String alNo) {
-        AlbumView a = panels.get(album);
+    /**
+     * Sets up a visible AlbumView panel
+     * 
+     * @param albumPageNo
+     *            the number of the panel to update
+     * @param cover
+     *            the path to the cover art
+     * @param artist
+     *            the artist of the album
+     * @param title
+     *            the title of the album
+     * @param track
+     *            a tracklist for the album
+     * @param displayNo
+     *            the display number for the album
+     */
+    public void updateAlbum(int albumPageNo, String cover, String artist, String title, String track, String displayNo) {
+        AlbumView a = panels.get(albumPageNo);
         a.setVisible(true);
         a.setArtist(artist);
         a.setTitle(title);
         a.setCover(cover);
         a.setTrackList(track);
-        a.setAlbumNo(alNo);
+        a.setAlbumNo(displayNo);
     }
 
-    public void hideAlbum(int album) {
-        AlbumView a = panels.get(album);
+    /**
+     * Hides one of the visible AlbumView panels
+     * 
+     * @param albumPageNo
+     *            the number of the AlbumView to hide
+     */
+    public void hideAlbum(int albumPageNo) {
+        AlbumView a = panels.get(albumPageNo);
         a.setVisible(false);
     }
 
+    /**
+     * Clears the currently playing track from the playbar
+     */
     public void clearPlayingTrack() {
         playBar.clearPlayingTrack();
     }
 
+    /**
+     * Sets the selection string in the playbar
+     * 
+     * @param selection
+     *            the new selection string
+     */
     public void setPlaybarSelectionString(String selection) {
         playBar.setSelection(selection);
     }
 
+    /**
+     * Updates the currently playing track in the playbar
+     * 
+     * @param trackTitle
+     *            the title of the new track
+     * @param albumTitle
+     *            the album title of the new track
+     * @param artist
+     *            the artist of the new track
+     * @param coverPath
+     *            the path to the cover art for the new track
+     */
     public void updatePlaybarTrack(String trackTitle, String albumTitle, String artist, String coverPath) {
         playBar.setTrack(trackTitle);
         playBar.setAlbum(albumTitle);
         playBar.setArtist(artist);
 
         playBar.setCover(coverPath);
-    }
-
-    public void repaint() {
-        // frame.repaint();
     }
 }

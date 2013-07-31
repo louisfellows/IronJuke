@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.louisfellows.ironjuke</groupId>
 	<artifactId>ironjuke</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>Iron Juke</name>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -24,28 +24,56 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.louisfellows.ironjuke.controller.Main</mainClass>
-                        </manifest>
-                    </archive>
-                        <descriptorRefs>
-                            <descriptorRef>jar-with-dependencies</descriptorRef>
-                        </descriptorRefs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-jar</id> 
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>com.louisfellows.ironjuke.controller.Main</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<configuration>
+							<tasks>
+							    
+								<delete dir="IronJukeRelease"/>
+								<mkdir dir="IronJukeRelease" />
+								<copy
+									file="./target/ironjuke-1.0.0-SNAPSHOT-jar-with-dependencies.jar"
+									tofile="./IronJukeRelease/IronJuke-${version}.jar" />
+								<copy todir="./IronJukeRelease/img">
+									<fileset dir="./img/" />
+								</copy>
+								<copy todir="./IronJukeRelease/">
+									<fileset dir="./deliverables/" />
+								</copy>
+
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
