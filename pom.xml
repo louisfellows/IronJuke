@@ -53,11 +53,11 @@
 						<phase>install</phase>
 						<configuration>
 							<tasks>
-							    
-								<delete dir="IronJukeRelease"/>
+
+								<delete dir="IronJukeRelease" />
 								<mkdir dir="IronJukeRelease" />
 								<copy
-									file="./target/ironjuke-1.0.0-SNAPSHOT-jar-with-dependencies.jar"
+									file="./target/ironjuke-${version}-jar-with-dependencies.jar"
 									tofile="./IronJukeRelease/IronJuke-${version}.jar" />
 								<copy todir="./IronJukeRelease/img">
 									<fileset dir="./img/" />
@@ -78,10 +78,11 @@
 	</build>
 
 	<dependencies>
+
 		<dependency>
-			<groupId>myid3</groupId>
-			<artifactId>myid3</artifactId>
-			<version>1.0</version>
+			<groupId>org</groupId>
+			<artifactId>jaudiotagger</artifactId>
+			<version>2.0.3</version>
 		</dependency>
 
 		<dependency>
@@ -97,12 +98,4 @@
 		</dependency>
 
 	</dependencies>
-
-	<repositories>
-		<repository>
-			<id>myid3.net</id>
-			<name>Java library for reading and editing id3 tags</name>
-			<url>http://www.fightingquaker.com/myid3/myid3.jar</url>
-		</repository>
-	</repositories>
 </project>

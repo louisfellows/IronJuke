@@ -150,6 +150,11 @@ public class Controller {
         ui.updatePlaybarTrack(track.getTitle(), track.getAlbum().getTitle(), track.getAlbum().getArtist(), track.getAlbum().getCover());
     }
 
+    /**
+     * sets the total number of albums visible on screen at once.
+     * 
+     * @param numberOfAlbums
+     */
     public void setNumberOfAlbums(int numberOfAlbums) {
         this.numberOfAlbums = numberOfAlbums;
     }

@@ -12,6 +12,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagException;
+
 import com.louisfellows.ironjuke.exceptions.AlbumNotFoundException;
 
 /**
@@ -159,7 +168,25 @@ public class DB {
 
                     for (int j = i; (j < i + TRACKS_PER_ALBUM) && (j < mp3s.length); j++) {
                         File mp3 = mp3s[j];
-                        String ttitle = mp3.getName();
+                        String ttitle;
+
+                        AudioFile f;
+                        try {
+                            f = AudioFileIO.read(mp3);
+                            Tag tag = f.getTag();
+                            ttitle = tag.getFirst(FieldKey.TITLE);
+                            if (ttitle.length() == 0) {
+                                ttitle = mp3.getName();
+                                ttitle = ttitle.substring(0, ttitle.length() - 4); // remove
+                                                                                   // '.mp3'
+                            }
+                        } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException e) {
+                            // Error occured, use filename
+                            ttitle = mp3.getName();
+                            ttitle = ttitle.substring(0, ttitle.length() - 4); // remove
+                                                                               // '.mp3'
+                        }
+
                         Track track = new Track(ttitle, mp3.getAbsolutePath(), album);
                         album.getTrack().put(album.getTrack().size(), track);
                     }
