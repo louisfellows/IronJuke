@@ -5,16 +5,27 @@
 	<artifactId>ironjuke</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
 	<name>Iron Juke</name>
+
 	<build>
-		<sourceDirectory>src</sourceDirectory>
+
+		<directory>target</directory>
+		<outputDirectory>target/classes</outputDirectory>
+		<finalName>${artifactId}-${version}</finalName>
+		<testOutputDirectory>target/test-classes</testOutputDirectory>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<scriptSourceDirectory>src/main/scripts</scriptSourceDirectory>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
 		<resources>
 			<resource>
-				<directory>src</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
+				<directory>src/main/resources</directory>
 			</resource>
 		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+			</testResource>
+		</testResources>
+
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -57,8 +68,8 @@
 								<delete dir="IronJukeRelease" />
 								<mkdir dir="IronJukeRelease" />
 								<copy
-									file="./target/ironjuke-${version}-jar-with-dependencies.jar"
-									tofile="./IronJukeRelease/IronJuke-${version}.jar" />
+									file="./target/ironjuke-${project.version}-jar-with-dependencies.jar"
+									tofile="./IronJukeRelease/IronJuke-${project.version}.jar" />
 								<copy todir="./IronJukeRelease/img">
 									<fileset dir="./img/" />
 								</copy>
@@ -95,6 +106,30 @@
 			<groupId>javazoom</groupId>
 			<artifactId>jlayer</artifactId>
 			<version>1.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.0.13</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.0.13</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>1.7.5</version>
 		</dependency>
 
 	</dependencies>
