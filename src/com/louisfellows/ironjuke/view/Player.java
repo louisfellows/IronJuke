@@ -79,6 +79,7 @@ public class Player extends PlaybackListener {
         tracks.addLast(track);
 
         if (playing == false) {
+            playing = true;
             playNext();
         }
     }

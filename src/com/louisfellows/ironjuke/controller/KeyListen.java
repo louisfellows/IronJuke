@@ -50,10 +50,42 @@ public class KeyListen implements KeyListener {
         } else if (key.getKeyCode() == KeyEvent.VK_9) {
             m_Keys.add(9);
             checkForCompletedKeys();
+        } else if (key.getKeyCode() == KeyEvent.VK_NUMPAD0) {
+            m_Keys.add(0);
+            checkForCompletedKeys();
+        } else if (key.getKeyCode() == KeyEvent.VK_NUMPAD1) {
+            m_Keys.add(1);
+            checkForCompletedKeys();
+        } else if (key.getKeyCode() == KeyEvent.VK_NUMPAD2) {
+            m_Keys.add(2);
+            checkForCompletedKeys();
+        } else if (key.getKeyCode() == KeyEvent.VK_NUMPAD3) {
+            m_Keys.add(3);
+            checkForCompletedKeys();
+        } else if (key.getKeyCode() == KeyEvent.VK_NUMPAD4) {
+            m_Keys.add(4);
+            checkForCompletedKeys();
+        } else if (key.getKeyCode() == KeyEvent.VK_NUMPAD5) {
+            m_Keys.add(5);
+            checkForCompletedKeys();
+        } else if (key.getKeyCode() == KeyEvent.VK_NUMPAD6) {
+            m_Keys.add(6);
+            checkForCompletedKeys();
+        } else if (key.getKeyCode() == KeyEvent.VK_NUMPAD7) {
+            m_Keys.add(7);
+            checkForCompletedKeys();
+        } else if (key.getKeyCode() == KeyEvent.VK_NUMPAD8) {
+            m_Keys.add(8);
+            checkForCompletedKeys();
+        } else if (key.getKeyCode() == KeyEvent.VK_NUMPAD9) {
+            m_Keys.add(9);
+            checkForCompletedKeys();
         } else if (key.getKeyCode() == KeyEvent.VK_R) {
             m_Controller.addRandom();
         } else if (key.getKeyCode() == KeyEvent.VK_C && key.isAltDown() == true) {
             m_Controller.cancelCurrent();
+        } else if (key.getKeyCode() == KeyEvent.VK_Q && key.isAltDown() == true) {
+            System.exit(0);
         }
     }
 

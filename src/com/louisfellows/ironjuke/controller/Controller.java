@@ -114,8 +114,14 @@ public class Controller {
         try {
 
             Album a = db.getAlbum(album);
-            Track t = a.getTrack(track);
-            player.addTrack(t);
+            if (track == -1) {
+                for (Track t : a.getTrack().values()) {
+                    player.addTrack(t);
+                }
+            } else {
+                Track t = a.getTrack(track);
+                player.addTrack(t);
+            }
 
         } catch (Exception e) {
             ui.setPlaybarSelectionString("No Track");
