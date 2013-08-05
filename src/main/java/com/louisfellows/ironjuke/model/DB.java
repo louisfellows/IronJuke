@@ -166,11 +166,12 @@ public class DB {
                         album = new Album(title, artist, cover);
                     }
 
+                    AudioFile f;
+
                     for (int j = i; (j < i + TRACKS_PER_ALBUM) && (j < mp3s.length); j++) {
                         File mp3 = mp3s[j];
                         String ttitle;
 
-                        AudioFile f;
                         try {
                             f = AudioFileIO.read(mp3);
                             Tag tag = f.getTag();
