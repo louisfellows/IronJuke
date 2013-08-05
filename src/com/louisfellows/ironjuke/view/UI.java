@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -121,18 +122,18 @@ public class UI {
      *            the artist of the album
      * @param title
      *            the title of the album
-     * @param track
+     * @param tracks
      *            a tracklist for the album
      * @param displayNo
      *            the display number for the album
      */
-    public void updateAlbum(int albumPageNo, String cover, String artist, String title, String track, String displayNo) {
+    public void updateAlbum(int albumPageNo, String cover, String artist, String title, HashMap<Integer, String> tracks, String displayNo) {
         AlbumView a = panels.get(albumPageNo);
         a.setVisible(true);
         a.setArtist(artist);
         a.setTitle(title);
         a.setCover(cover);
-        a.setTrackList(track);
+        a.setTrackList(tracks);
         a.setAlbumNo(displayNo);
     }
 

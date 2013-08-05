@@ -115,7 +115,7 @@ public class Controller {
 
             Album a = db.getAlbum(album);
             if (track == -1) {
-                for (Track t : a.getTrack().values()) {
+                for (Track t : a.getTracks().values()) {
                     player.addTrack(t);
                 }
             } else {
@@ -139,7 +139,7 @@ public class Controller {
         for (int i = 0; i < numberOfAlbums; i++) {
             try {
                 Album a = db.getAlbum(startAlbum + i);
-                ui.updateAlbum(i, a.getCover(), a.getArtist(), a.getTitle(), a.getTrackList(), (startAlbum + (i + 1)) + "");
+                ui.updateAlbum(i, a.getCover(), a.getArtist(), a.getTitle(), a.getTrackTitles(), (startAlbum + (i + 1)) + "");
             } catch (Exception e) {
                 ui.hideAlbum(i);
             }

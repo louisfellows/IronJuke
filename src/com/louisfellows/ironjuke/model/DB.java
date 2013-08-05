@@ -188,7 +188,7 @@ public class DB {
                         }
 
                         Track track = new Track(ttitle, mp3.getAbsolutePath(), album);
-                        album.getTrack().put(album.getTrack().size(), track);
+                        album.getTracks().put(album.getTracks().size(), track);
                     }
 
                     albums.put(albums.size(), album);

@@ -72,8 +72,25 @@ public class Album {
      * 
      * @return
      */
-    public HashMap<Integer, Track> getTrack() {
+    public HashMap<Integer, Track> getTracks() {
         return tracks;
+    }
+
+    /**
+     * Returns a list of track titles on the album hashed against their track
+     * number.
+     * 
+     * @return
+     */
+    public HashMap<Integer, String> getTrackTitles() {
+
+        HashMap<Integer, String> stringMap = new HashMap<Integer, String>();
+
+        for (Integer i : tracks.keySet()) {
+            stringMap.put(i, tracks.get(i).getTitle());
+        }
+
+        return stringMap;
     }
 
     /**

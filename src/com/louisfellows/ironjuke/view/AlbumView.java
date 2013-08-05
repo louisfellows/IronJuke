@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -23,10 +25,11 @@ public class AlbumView extends JPanel {
 
     private static final long serialVersionUID = -2024743821441955507L;
 
+    private static final int TRACKS_PER_ALBUM = 13;
     public static final int ALBUMVIEW_WIDTH = 390;
     public static final int ALBUMVIEW_HEIGHT = 250;
 
-    JLabel trackList;
+    ArrayList<JLabel> trackList;
     ImageIcon cover;
     JLabel title;
     JLabel artist;
@@ -41,12 +44,6 @@ public class AlbumView extends JPanel {
         cover = new ImageIcon();
         coverLabel = new JLabel(cover);
         coverLabel.setBounds(0, 0, 250, 250);
-
-        trackList = new JLabel("TRACKS");
-        trackList.setBounds(250, 40, 140, 210);
-        trackList.setVerticalAlignment(JLabel.TOP);
-        trackList.setOpaque(false);
-        trackList.setForeground(Color.BLACK);
 
         artist = new JLabel("ARTIST");
         artist.setBounds(250, 0, 140, 20);
@@ -69,8 +66,19 @@ public class AlbumView extends JPanel {
         add(albumNo);
         add(title);
         add(artist);
-        add(trackList);
         add(coverLabel);
+
+        trackList = new ArrayList<JLabel>();
+        for (int i = 0; i < TRACKS_PER_ALBUM; i++) {
+            JLabel track = new JLabel("TRACK" + i);
+            track.setBounds(260, 40 + (i * 15), 130, 15);
+            track.setFont(new Font("SansSerif", Font.PLAIN, 10));
+            track.setVerticalAlignment(JLabel.TOP);
+            track.setOpaque(false);
+            track.setForeground(Color.BLACK);
+            trackList.add(track);
+            add(track);
+        }
 
     }
 
@@ -82,8 +90,14 @@ public class AlbumView extends JPanel {
      * @param trackList
      *            the list of tracks to display
      */
-    public void setTrackList(String trackList) {
-        this.trackList.setText("<html>" + trackList + "</html>");
+    public void setTrackList(HashMap<Integer, String> tracks) {
+        for (Integer i : tracks.keySet()) {
+            this.trackList.get(i).setText((i + 1) + " " + tracks.get(i));
+            this.trackList.get(i).setVisible(true);
+        }
+        for (int i = tracks.size(); i < TRACKS_PER_ALBUM; i++) {
+            this.trackList.get(i).setVisible(false);
+        }
     }
 
     /**
