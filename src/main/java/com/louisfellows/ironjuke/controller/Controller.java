@@ -37,6 +37,17 @@ public class Controller {
         player.setController(this);
 
         ui = new UI(this, width, height);
+
+        albumStart = 0;
+
+        UpdateAlbums(albumStart);
+    }
+
+    public Controller(DB db, UI ui, Player player) throws InterruptedException, InvocationTargetException {
+        this.db = db;
+        this.ui = ui;
+        this.player = player;
+
         albumStart = 0;
 
         UpdateAlbums(albumStart);
